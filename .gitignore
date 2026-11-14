@@ -6,6 +6,12 @@ service.json
 .env.*
 *.log
 
+# build output & local tooling
+site/
+.cache/
+venv/
+.venv/
+
 # os / editor
 .DS_Store
 *.swp

@@ -1,0 +1,62 @@
+site_name: OpenCode & Linux Lab
+site_description: บทเรียน OpenCode V2, Linux และ Git ภาษาไทย — สรุปจากการทดลองจริงบนเครื่อง Debian 13 (proot)
+site_url: https://sakzeed.github.io/opencode-lab/
+repo_url: https://github.com/sakzeed/opencode-lab
+repo_name: sakzeed/opencode-lab
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: th
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: สลับเป็นโหมดมืด
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: สลับเป็นโหมดสว่าง
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.inlinehilite
+
+nav:
+  - หน้าแรก: index.md
+  - OpenCode V2:
+      - 1. สถาปัตยกรรม client–server: opencode/01-architecture.md
+      - 2. Configuration & Precedence: opencode/02-configuration.md
+      - 3. Agents & Subagents: opencode/03-agents.md
+      - 4. Commands & Skills: opencode/04-commands-skills.md
+      - 5. Permissions & Policies: opencode/05-permissions.md
+      - 6. MCP & Plugins: opencode/06-mcp-plugins.md
+      - 7. CLI / TUI / API / SDK: opencode/07-cli-api.md
+  - Linux:
+      - 1. ระบบไฟล์: linux/01-filesystem.md
+      - 2. ข้อความ ท่อ และ redirect: linux/02-text-pipes.md
+      - 3. สิทธิ์และเจ้าของไฟล์: linux/03-permissions.md
+  - Git & GitHub:
+      - 1. git พื้นฐาน → GitHub: git/01-git-github.md
