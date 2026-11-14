@@ -1,10 +1,10 @@
 # Linux บทที่ 2: ข้อความ ท่อ และการเปลี่ยนทาง (text, pipes, redirects)
 
-ก่อนเริ่ม — แผน 8 บทที่ผมใช้อยู่ (แก้ได้ถ้าคุณอยากได้ลำดับอื่น):
+ก่อนเริ่ม — แผน 8 บทที่ผมใช้อยู่ (เว็บนี้เผยแพร่บท 1–3; แก้ลำดับได้ถ้าคุณต้องการ):
 
 | บท | หัวข้อ | สถานะ |
 |---|---|---|
-| 1 | ไฟล์ystem, path, symlink, `find` | ✅ |
+| 1 | ระบบไฟล์, path, symlink, `find` | ✅ |
 | **2** | **ข้อความ, pipe, redirect, grep/sed/awk** | **วันนี้** |
 | 3 | permission & ownership (`chmod`, `chown`, umask) | ถัดไป |
 | 4 | process, signal, job control | |
@@ -194,7 +194,7 @@ no
 | `a \|\| b` | b ทำงานเมื่อ a ล้มเหลว |
 | `a ; b` | b ทำงานเสมอ |
 
-นี่คือเหตุผลที่ permission system ของ OpenCode ใช้ scanner แยก compound command (บทที่ 2 ของ OpenCode) — `&&` ทำให้คำสั่งเดียวกลายเป็นหลายคำสั่ง
+นี่คือเหตุผลที่ permission system ของ OpenCode ใช้ scanner แยก compound command (บทที่ 5 ของ OpenCode) — `&&` ทำให้คำสั่งเดียวกลายเป็นหลายคำสั่ง
 
 ---
 

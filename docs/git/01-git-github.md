@@ -288,7 +288,7 @@ error: commit b2091aac... is a merge but no -m option was given.
 fatal: revert failed
 ```
 
-`-m 1` = "ถือว่า parent ที่ 1 (master) คือ主线 แล้วย้อนสิ่งที่ merge เข้ามา"
+`-m 1` = "ถือว่า parent ที่ 1 (master) คือสายหลัก แล้วย้อนสิ่งที่ merge เข้ามา"
 
 > `git reflog` เก็บประวัติการขยับ HEAD ~90 วัน — เป็นตาข่ายนิรภัยที่คนส่วนใหญ่ไม่รู้ว่ามี
 > `reset --hard` ไม่ได้ลบ commit ทันที; มันแค่เลื่อน pointer (ของจริงจะถูก gc ภายหลัง)

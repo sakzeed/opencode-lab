@@ -356,7 +356,7 @@ chmod 700 private
 find . -type f -perm /0022 -printf '%m %p\n'      # ไม่มี output = ดี
 
 # 4
-chmod u-x,g+w,o-rwx,o-r,g+r c.txt                 # 751 → 640 (หรือ chmod 640 ก็ได้)
+chmod u-x,g-x,o-rwx c.txt                 # 751 → 640 (หรือ chmod 640 ก็ได้)
 stat -c '%a' c.txt                                 # 640
 
 # 5
@@ -388,5 +388,5 @@ setuid(4) = รันด้วยเจ้าของ   setgid(2) = inherit gro
 **กฎ 3 ข้อที่ควรติดตัว**
 
 1. ไฟล์ลับ → `600`, โฟลเดอร์ลับ → `700`, อย่าใช้ `777` เด็ดขาด
-2. ถ้าเจอ permission error ให้ถามว่า "ใครเป็น owner" ก่อนเสมอ — `chmod` แก้ที่อาการ, `chown` แก้ที่ причина
+2. ถ้าเจอ permission error ให้ถามว่า "ใครเป็น owner" ก่อนเสมอ — `chmod` แก้ที่อาการ, `chown` แก้ที่ต้นเหตุ
 3. `find -perm` คือเครื่องมือตรวจสอบ ไม่ใช่แค่คำสั่งท่องจำ

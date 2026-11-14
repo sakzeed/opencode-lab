@@ -59,7 +59,7 @@ opencode api get /api/info
 └── opencode.json(c)         ← ยังไม่มี! จะเกิดเมื่อคุณตั้งค่า
 
 ~/.local/share/opencode/     ← data ของ server
-├── opencode.db              ← sessions + messages (12 MB, SQLite)
+├── opencode.db              ← sessions + messages (12 MB ตอนเริ่มบท, SQLite)
 ├── opencode.db-wal          ← write-ahead log (ปกติ)
 ├── log/opencode.log         ← จุดแรกที่ต้องดูเวลา debug
 ├── repos/                   ← ข้อมูล git repo ที่เกี่ยวข้อง

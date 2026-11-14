@@ -79,7 +79,7 @@
 
 ## 6.2 ของจริงบนเครื่องนี้: `opencode_console` โผล่มาได้อย่างไร
 
-ใน config ของเรา **ไม่มี** `mcp` เลย แต่:
+ใน config ของเรา **ตอนเริ่มบทนี้ไม่มี** `mcp` เลย แต่:
 
 ```sh
 $ opencode mcp list
@@ -390,7 +390,7 @@ TUI-only: ประกาศใน `cli.json` (`plugins: ["opencode-acme-cli"]`)
 
 | ชั้น | สถานะ |
 |---|---|
-| `mcp` ใน global config | **ไม่มี** — `opencode_console` มาจาก Console |
+| `mcp` ใน global config | **ไม่มีตอนเริ่มบท** — `opencode_console` มาจาก Console; ภายหลังเพิ่ม `context7` (ดูบทที่ 7) |
 | `policies` ใน global config | **ไม่มี** — Console ส่งมา (deny provider `*`, allow `opencode`) |
 | `plugins` | `superpowers@git+...#22f0b46` (v7.0.2, 15 skills) |
 | `~/.config/opencode/plugins/` | ไม่มี |
@@ -431,13 +431,3 @@ opencode plugin list --standalone    # → No plugins found
 rm opencode.jsonc
 opencode plugin list --standalone    # → superpowers กลับมา
 ```
-
----
-
-## ก่อนไปบทถัดไป — เลือกได้ 1 อย่าง
-
-1. **ลงมือจริง:** เพิ่ม MCP server ระดับ global 1 ตัว (context7 จาก sandbox ขึ้น global) แล้วทดสอบว่า tool โผล่ใน catalog + ลอง deny ด้วย permission
-2. **เขียน plugin แรก:** สร้าง `~/.config/opencode/plugins/*.ts` ตัวเล็ก ๆ (เช่น hook log/คำสั่ง) แล้วดูว่า reload เองหรือต้อง restart
-3. **ไปบทที่ 7 เลย:** CLI / TUI / API / SDK — ต่อยอดจากที่เราใช้ `opencode api` มาตลอด
-
-sandbox ที่ทิ้งไว้ให้ลอง: `/tmp/opencode/mcp-add-lab` (context7 connected), `/tmp/opencode/mcp-lab` (server พังโดยตั้งใจ), `/tmp/opencode/plugin-lab` — ลบได้ทุกเมื่อ บอกได้ถ้าอยากให้เก็บกวาด

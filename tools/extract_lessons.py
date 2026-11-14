@@ -31,6 +31,58 @@ MAPPING = [
     ("# Git & GitHub บทที่ 1:", "docs/git/01-git-github.md"),
 ]
 
+# Headings that only ever introduce chat, never a lesson section (real endings
+# are "## สรุปบทที่ N", "## แบบฝึกหัด", "## เช็คความเข้าใจ").
+CHAT_SECTION_PREFIXES = (
+    "## ก่อนไปบทถัดไป",
+    "## อยากให้ผม",
+    "## พร้อมลงมือจริงไหม",
+    "## จะไปทางไหนต่อ",
+    "## เลือกได้ 1 อย่าง",
+)
+
+# Corrections to the transcript. The export is the source, but it contains a few
+# defects (mixed-script glitches and one wrong chmod result); these are fixed
+# here so regenerating stays deterministic. Every pair must match exactly once.
+REPAIRS: dict[str, list[tuple[str, str]]] = {
+    "docs/opencode/01-architecture.md": [
+        ("(12 MB, SQLite)", "(12 MB ตอนเริ่มบท, SQLite)"),
+    ],
+    "docs/opencode/02-configuration.md": [
+        ("所以你ต้องตรวจเอง", " คุณจึงต้องตรวจเอง"),
+    ],
+    "docs/opencode/05-permissions.md": [
+        ("### 7 actions ที่มีจริง", "### 8 actions ที่มีจริง"),
+        ("มี\ufffdลายชั้น", "มีหลายชั้น"),
+    ],
+    "docs/opencode/06-mcp-plugins.md": [
+        # The lesson was written before context7 was added to the global config;
+        # chapter 7 documents the later state.
+        ("ใน config ของเรา **ไม่มี** `mcp` เลย แต่:", "ใน config ของเรา **ตอนเริ่มบทนี้ไม่มี** `mcp` เลย แต่:"),
+        (
+            "| `mcp` ใน global config | **ไม่มี** — `opencode_console` มาจาก Console |",
+            "| `mcp` ใน global config | **ไม่มีตอนเริ่มบท** — `opencode_console` มาจาก Console; ภายหลังเพิ่ม `context7` (ดูบทที่ 7) |",
+        ),
+    ],
+    "docs/git/01-git-github.md": [
+        ("คือ主线 แล้ว", "คือสายหลัก แล้ว"),
+    ],
+    "docs/linux/02-text-pipes.md": [
+        ("ไฟล์ystem", "ระบบไฟล์"),
+        ("(บทที่ 2 ของ OpenCode)", "(บทที่ 5 ของ OpenCode)"),
+        (
+            "ก่อนเริ่ม — แผน 8 บทที่ผมใช้อยู่ (แก้ได้ถ้าคุณอยากได้ลำดับอื่น):",
+            "ก่อนเริ่ม — แผน 8 บทที่ผมใช้อยู่ (เว็บนี้เผยแพร่บท 1–3; แก้ลำดับได้ถ้าคุณต้องการ):",
+        ),
+    ],
+    "docs/linux/03-permissions.md": [
+        ("แก้ที่ причина", "แก้ที่ต้นเหตุ"),
+        # 751 = rwxr-x--x; clearing u-x, g-x and o-rwx leaves 640.
+        ("u-x,g+w,o-rwx,o-r,g+r", "u-x,g-x,o-rwx"),
+    ],
+}
+
+
 
 def assistant_texts(export: Path) -> list[str]:
     data = json.loads(export.read_text(encoding="utf-8"))
@@ -56,7 +108,8 @@ def trim_footer(text: str) -> str:
     """Drop the trailing "want to continue?" chat after the last rule.
 
     A real closing section (e.g. "## สรุป") is long or starts with a heading,
-    so it is kept; a short tail after a horizontal rule is chat.
+    so it is kept; a short tail after a horizontal rule is chat. A tail that
+    opens with a chat-only heading is always cut, however long it is.
     """
     lines = text.splitlines()
     for index in range(len(lines) - 1, -1, -1):
@@ -65,9 +118,20 @@ def trim_footer(text: str) -> str:
         rest = "\n".join(lines[index + 1 :]).strip()
         if not rest:
             return "\n".join(lines[:index]).rstrip() + "\n"
+        if rest.startswith(CHAT_SECTION_PREFIXES):
+            return "\n".join(lines[:index]).rstrip() + "\n"
         if len(rest) < 1200 and "```" not in rest and not rest.startswith("## "):
             return "\n".join(lines[:index]).rstrip() + "\n"
     return text.rstrip() + "\n"
+
+
+def apply_repairs(rel: str, text: str) -> str:
+    for old, new in REPAIRS.get(rel, ()):
+        matches = text.count(old)
+        if matches != 1:
+            raise SystemExit(f"repair matched {matches} times (want 1): {rel}: {old!r}")
+        text = text.replace(old, new)
+    return text
 
 
 def normalize_headings(text: str) -> str:
@@ -108,7 +172,7 @@ def main() -> int:
             missing.append(marker)
             continue
 
-        content = normalize_headings(trim_footer(lesson))
+        content = apply_repairs(rel, normalize_headings(trim_footer(lesson)))
         target = ROOT / rel
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")

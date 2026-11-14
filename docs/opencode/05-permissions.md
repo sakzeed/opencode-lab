@@ -99,7 +99,7 @@ shell ใช้ scanner แยก compound command (`a && b | c`) ออกเ�
 
 ## 5.3 Policies: เพดานที่ถามไม่ได้
 
-### 7 actions ที่มีจริง
+### 8 actions ที่มีจริง
 
 | Action | Resource | ตัวอย่าง |
 |---|---|---|
@@ -163,7 +163,7 @@ shell ใช้ scanner แยก compound command (`a && b | c`) ออกเ�
 | อยากให้ถามก่อน `rm -rf` แต่ยอมอนุมัติได้ | permission `ask` | ยังทำงานได้หลังอนุมัติ |
 | ห้าม `sudo` เด็ดขาด ไม่ว่ากดอะไร | **policy `tool.use`** | permission `deny` ก็ได้ แต่ policy กันแม้แต่ "allow always" ที่เคยบันทึกไว้ |
 | ห้าม agent อ่าน `.env` | permission `read` (มี default) | |
-| ห้ามแก้ `.env` ตลอดกาล | policy `edit:*.env` | permission deny ก็พอ แต่ policy ชัดกว่าเมื่อมี�ลายชั้น config |
+| ห้ามแก้ `.env` ตลอดกาล | policy `edit:*.env` | permission deny ก็พอ แต่ policy ชัดกว่าเมื่อมีหลายชั้น config |
 | ปิด provider ที่ไม่ต้องการใช้เลย | policy `provider.use` | provider หายจาก catalog |
 | ซ่อน skill ที่อันตรายจากโมเดล | permission `skill` deny | โฆษณา/โหลดไม่ได้ |
 | ห้ามโหลด plugin ตัวหนึ่งทุกกรณี | policy `plugin.use` | plugin ไม่ถูกโหลด |
