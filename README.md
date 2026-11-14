@@ -28,6 +28,11 @@ opencode plugin list
 opencode mcp list
 ```
 
+## บทเรียนที่เกี่ยวข้อง
+
+- **OpenCode V2 (7 บท)** — client/server, config & permissions, agents, commands & skills, policies, MCP & plugins, CLI/API/SDK
+- **Linux** — filesystem, text processing (pipes/redirects), permissions & ownership
+
 ## ⚠️ Secret — ห้าม commit
 
 ไฟล์ต่อไปนี้ **ไม่ถูก track** โดยเจตนา (อยู่ใน `.gitignore`):
