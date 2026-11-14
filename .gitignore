@@ -1,0 +1,11 @@
+# secrets & runtime artifacts — never commit
+service.json
+*.db
+*.db-journal
+.env
+.env.*
+*.log
+
+# os / editor
+.DS_Store
+*.swp
