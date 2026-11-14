@@ -28,10 +28,26 @@ opencode plugin list
 opencode mcp list
 ```
 
-## บทเรียนที่เกี่ยวข้อง
+## เว็บไซต์บทเรียน
+
+📖 **https://sakzeed.github.io/opencode-lab/**
+
+เนื้อหาอยู่ใน `docs/` (Markdown) และ build ด้วย MkDocs Material — ทุกครั้งที่ push `main` ที่แก้ `docs/` หรือ `mkdocs.yml` GitHub Actions จะ build และ deploy ขึ้น Pages อัตโนมัติ
+
+```sh
+# preview ในเครื่อง
+python3 -m venv .venv
+.venv/bin/pip install "mkdocs-material==9.*"
+.venv/bin/mkdocs serve        # http://127.0.0.1:8000
+
+# ตรวจก่อน push (CI รันสองคำสั่งนี้)
+python3 tools/check_docs.py
+.venv/bin/mkdocs build --strict
+```
 
 - **OpenCode V2 (7 บท)** — client/server, config & permissions, agents, commands & skills, policies, MCP & plugins, CLI/API/SDK
-- **Linux** — filesystem, text processing (pipes/redirects), permissions & ownership
+- **Linux (3 บท)** — filesystem, text processing (pipes/redirects), permissions & ownership
+- **Git & GitHub (1 บท)** — commit graph, branch/merge, remote, PR
 
 ## ⚠️ Secret — ห้าม commit
 
