@@ -2,6 +2,8 @@
 service.json
 *.db
 *.db-journal
+*.db-wal
+*.db-shm
 .env
 .env.*
 *.log
@@ -11,6 +13,7 @@ site/
 .cache/
 venv/
 .venv/
+__pycache__/
 
 # os / editor
 .DS_Store
