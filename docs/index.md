@@ -8,6 +8,7 @@
 |---|---|---|
 | **OpenCode V2** (7 บท) | client–server, config, agents, commands/skills, permissions, MCP/plugins, CLI/API | [บทที่ 1](opencode/01-architecture.md) |
 | **Linux** (4 บท) | ระบบไฟล์, pipes/redirects, permissions & ownership, process/signal/job control | [บทที่ 1](linux/01-filesystem.md) |
+| **Go** (5 บท) | toolchain & CLI, อ่าน `/proc`, package & test, JSON & pipe, goroutine & ship binary — สร้าง `labps` ตัวเดียวทั้ง track | [บทที่ 1](go/01-toolchain-cli.md) |
 | **Git & GitHub** (2 บท) | commit graph, branch/merge, remote, PR, Pages, GitHub Actions & CI | [บทที่ 1](git/01-git-github.md) |
 
 ## สิ่งที่ต้องมี
@@ -15,6 +16,7 @@
 - OpenCode V2 (บทเรียนอ้าง `2.3.0`)
 - Linux shell (bash 5.x) — คำสั่งส่วนใหญ่อยู่ใน POSIX พื้นฐาน
 - ไม่ต้องมี `node`/`npm` สำหรับบท plugin และ MCP
+- track Go ใช้ Go 1.27 (stdlib อย่างเดียว) — output ของ track นี้รันบน Ubuntu 24.04 (proot, aarch64)
 
 ## หมายเหตุเรื่องสภาพแวดล้อม
 

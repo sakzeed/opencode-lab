@@ -18,3 +18,4 @@ __pycache__/
 # os / editor
 .DS_Store
 *.swp
+/labs/labps/labps

@@ -1,5 +1,5 @@
 site_name: OpenCode & Linux Lab
-site_description: บทเรียน OpenCode V2, Linux และ Git ภาษาไทย — สรุปจากการทดลองจริงบนเครื่อง Debian 13 (proot)
+site_description: บทเรียน OpenCode V2, Linux, Go และ Git ภาษาไทย — สรุปจากการทดลองจริงบนเครื่อง Debian 13 (proot)
 site_url: https://sakzeed.github.io/opencode-lab/
 repo_url: https://github.com/sakzeed/opencode-lab
 repo_name: sakzeed/opencode-lab
@@ -59,6 +59,12 @@ nav:
       - 2. ข้อความ ท่อ และ redirect: linux/02-text-pipes.md
       - 3. สิทธิ์และเจ้าของไฟล์: linux/03-permissions.md
       - 4. process, signal และ job control: linux/04-processes.md
+  - Go:
+      - 1. toolchain, module และ CLI แรก: go/01-toolchain-cli.md
+      - 2. struct, error และการอ่าน /proc: go/02-reading-proc.md
+      - 3. package, test และ go vet: go/03-packages-tests.md
+      - 4. JSON, io.Writer และ pipe: go/04-json-pipes.md
+      - 5. goroutine, signal และการ ship: go/05-concurrency-ship.md
   - Git & GitHub:
       - 1. git พื้นฐาน → GitHub: git/01-git-github.md
       - 2. GitHub Actions & CI: git/02-actions.md

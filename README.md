@@ -9,6 +9,7 @@
 | `config/opencode.jsonc` | config กลาง: model `opencode/big-pickle`, permission 26 กฎ, MCP `context7`, plugin `superpowers` |
 | `commands/god-agents.md` | slash command `/god-agents` — orchestrator 5 ขั้น (plan → dispatch → collect → report → verify) |
 | `plugins/lab-sysinfo.js` | plugin แรก: เพิ่ม tool `lab.sysinfo` + logging lifecycle (hot reload) |
+| `labs/labps/` | CLI ภาษา Go จาก track Go: อ่าน `/proc` แล้วรายงาน process เป็นตาราง/JSON (stdlib เท่านั้น) |
 
 ## วิธีใช้
 
@@ -43,10 +44,15 @@ python3 -m venv .venv
 # ตรวจก่อน push (CI รันสองคำสั่งนี้)
 python3 tools/check_docs.py
 .venv/bin/mkdocs build --strict
+
+# โค้ด Go (CI job `go` รันสามคำสั่งนี้)
+cd labs/labps
+test -z "$(gofmt -l .)" && go vet ./... && go test ./...
 ```
 
 - **OpenCode V2 (7 บท)** — client/server, config & permissions, agents, commands & skills, policies, MCP & plugins, CLI/API/SDK
 - **Linux (4 บท)** — filesystem, text processing (pipes/redirects), permissions & ownership, process/signal/job control
+- **Go (5 บท)** — toolchain & CLI, อ่าน `/proc`, package & test, JSON & pipe, goroutine/signal & ship binary
 - **Git & GitHub (2 บท)** — commit graph, branch/merge, remote, PR, Pages, GitHub Actions & CI
 
 ## ⚠️ Secret — ห้าม commit

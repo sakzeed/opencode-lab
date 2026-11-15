@@ -24,6 +24,11 @@ EXPECTED = [
     "docs/linux/02-text-pipes.md",
     "docs/linux/03-permissions.md",
     "docs/linux/04-processes.md",
+    "docs/go/01-toolchain-cli.md",
+    "docs/go/02-reading-proc.md",
+    "docs/go/03-packages-tests.md",
+    "docs/go/04-json-pipes.md",
+    "docs/go/05-concurrency-ship.md",
     "docs/git/01-git-github.md",
     "docs/git/02-actions.md",
 ]

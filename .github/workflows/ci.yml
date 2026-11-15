@@ -6,6 +6,7 @@ on:
       - "docs/**"
       - "mkdocs.yml"
       - "tools/**"
+      - "labs/**"
       - "requirements.txt"
       - ".github/workflows/**"
   workflow_dispatch:
@@ -43,3 +44,17 @@ jobs:
           name: site-${{ matrix.python-version }}
           path: site
           retention-days: 7
+
+  go:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/labps
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: labs/labps/go.mod
+      - run: test -z "$(gofmt -l .)" || (gofmt -l .; exit 1)
+      - run: go vet ./...
+      - run: go test ./...
