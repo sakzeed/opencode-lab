@@ -300,13 +300,29 @@ check (3.12)	Validate lesson pages	... ok: 12 pages
 check (3.11)	Validate lesson pages	... ok: 12 pages
 ```
 
-รอบนั้นยังไม่มีหน้าบทนี้ (12 หน้า) — หลังเพิ่มบทนี้เป็น 13 หน้า CI จะตรวจ 13
+รอบนั้นยังไม่มีหน้าบทนี้ (12 หน้า) — หลังเพิ่มบทนี้เป็น 13 หน้า CI ตรวจได้ 13 หน้าจริงใน run ที่ 2 ของ PR เดียวกัน (`43662991579`):
+
+```sh
+$ gh run view 43662991579 --log | grep 'ok: 13 pages'
+check (3.12)	Validate lesson pages	... ok: 13 pages
+check (3.11)	Validate lesson pages	... ok: 13 pages
+```
 
 cache ทำงานแบบ "เขียนก่อน อ่านรอบหน้า" — log รอบแรกบอกตรง ๆ:
 
 ```sh
 $ gh run view 43662647654 --log | grep -i 'pip cache'
 ... pip cache is not found
+```
+
+รอบที่ 2 บน PR เดียวกัน cache ถูก restore จริงทั้งสอง job:
+
+```sh
+$ gh run view 43662991579 --log | grep -i 'cache restored'
+check (3.12)	... Cache restored successfully
+check (3.12)	... Cache restored from key: setup-python-Linux-x64-24.04-Ubuntu-python-3.12.16-pip-4a351ad6...
+check (3.11)	... Cache restored successfully
+check (3.11)	... Cache restored from key: setup-python-Linux-x64-24.04-Ubuntu-python-3.11.18-pip-4a351ad6...
 ```
 
 > ⚠️ cache ผูกกับ ref: cache ที่ PR สร้างจะถูกใช้ใน PR เดิม (`refs/pull/2/merge`) แต่ `workflow_dispatch` ที่สั่งบน branch (`refs/heads/...`) คนละ scope จึงยัง miss — เป็นพฤติกรรมของ Actions ไม่ใช่ความผิดพลาด
