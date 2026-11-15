@@ -8,7 +8,7 @@
 |---|---|---|
 | **OpenCode V2** (7 บท) | client–server, config, agents, commands/skills, permissions, MCP/plugins, CLI/API | [บทที่ 1](opencode/01-architecture.md) |
 | **Linux** (4 บท) | ระบบไฟล์, pipes/redirects, permissions & ownership, process/signal/job control | [บทที่ 1](linux/01-filesystem.md) |
-| **Git & GitHub** (2 บท) | commit graph, branch/merge, remote, PR, Pages, GitHub Actions/CI | [บทที่ 1](git/01-git-github.md) |
+| **Git & GitHub** (2 บท) | commit graph, branch/merge, remote, PR, Pages, GitHub Actions & CI | [บทที่ 1](git/01-git-github.md) |
 
 ## สิ่งที่ต้องมี
 

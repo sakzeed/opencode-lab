@@ -1,6 +1,6 @@
-# GitHub บทที่ 2: GitHub Actions — ให้ robot ตรวจงานก่อน merge
+# Git & GitHub บทที่ 2: GitHub Actions — ให้ robot ตรวจงานก่อน merge
 
-บทที่ 1 จบที่ `push` ขึ้น GitHub และเปิด PR ได้ แต่ยังเหลือคำถามสำคัญ: **"ใครตรวจว่าโค้ดที่ push ไปยังใช้ได้จริง ก่อนที่มันจะถึง main"**
+บทที่ 1 จบที่ `push` ขึ้น GitHub และเปิด PR ได้ แต่ยังเหลือคำถามสำคัญ: **"ใครตรวจว่าโค้ดที่ push ไปนั้นใช้ได้จริง ก่อนที่มันจะถึง main"**
 
 คำตอบของ repo นี้คือ GitHub Actions — และเว็บที่คุณกำลังอ่านอยู่ก็ถูก build และ deploy ด้วย Actions ทุกครั้งที่ push `main` บทนี้จึงแกะของจริงที่ทำงานอยู่ แล้วเพิ่ม CI สำหรับ PR เข้าไปด้วย
 
@@ -77,7 +77,7 @@ https://github.com/sakzeed/opencode-lab/actions/runs/43662751198
 
 `pull_request` ใช้กับ CI: ทุกครั้งที่เปิด PR หรือ push เพิ่มใน PR นั้น workflow จะรัน โดย `github.ref` เป็น `refs/pull/<เลข>/merge`
 
-> ⚠️ caveat: `paths` ที่แคบเกินไปทำให้ CI ไม่รันในจุดที่ควร — ตอนเพิ่ม `requirements.txt` จึงต้องใส่ path นี้ใน `ci.yml` ด้วย ไม่งั้นแก้ dependency แล้วไม่มีอะไรตรวจ
+> ⚠️ caveat: `paths` ที่แคบเกินไปทำให้ CI ไม่รันในจุดที่ควร — ตอนเพิ่ม `requirements.txt` จึงต้องใส่ path นี้ใน **ทั้ง** `ci.yml` และ `pages.yml` ไม่งั้นแก้ dependency แล้วไม่มีอะไรตรวจ หรือ PR ผ่านแต่เว็บไม่ rebuild
 
 ---
 
@@ -97,7 +97,7 @@ permissions:
 | permission | ใช้ทำอะไร |
 |---|---|
 | `contents: read` | อ่านโค้ดใน repo (checkout) |
-| `pages: write` | เขียน artifact ลง Pages |
+| `pages: write` | ให้ `deploy-pages` เผยแพร่ artifact ขึ้น Pages |
 | `id-token: write` | ขอ OIDC token สำหรับ deploy-pages |
 
 `ci.yml` ขอแค่ `contents: read` เพราะแค่อ่านโค้ดกับ build — **PR จาก branch อื่นไม่ควรได้สิทธิ์ deploy**
@@ -186,7 +186,7 @@ check (3.12)	pass	16s	https://github.com/sakzeed/opencode-lab/actions/runs/43662
 `ci.yml` ก็อัป artifact เหมือนกัน แต่เพื่อให้คนดาวน์โหลดไปตรวจ:
 
 ```sh
-$ gh run download 43662647654 -n site-3.12 -D /tmp/ch2-artifact
+$ TMPDIR=/tmp gh run download 43662647654 -n site-3.12 -D /tmp/ch2-artifact
 $ ls /tmp/ch2-artifact | head -5
 404.html
 assets
@@ -372,20 +372,27 @@ $ python3 -c 'import yaml; print(list(yaml.safe_load(open(".github/workflows/ci.
 ['name', True, 'permissions', 'concurrency', 'jobs']
 ```
 
-`on` หายไป กลายเป็น `True` เพราะ YAML 1.1 ตีความ `on` เป็น boolean — เครื่องมือที่ parse ด้วย PyYAML ต้องรู้เรื่องนี้ (หรืออ่านด้วย `yaml.compose`) ไม่ใช่แปลว่าไฟล์ผิด
+`on` หายไป กลายเป็น `True` เพราะ YAML 1.1 ตีความ `on` เป็น boolean — เครื่องมือที่ parse ด้วย PyYAML ต้องรู้เรื่องนี้ ไม่ใช่แปลว่าไฟล์ผิด วิธีตรวจที่ถูกคือ quote key ตอนอ่าน:
+
+```sh
+$ python3 -c 'import yaml; print(list(yaml.safe_load("on: push\n")))'
+[True]
+$ python3 -c 'import yaml; print(list(yaml.safe_load("\"on\": push\n")))'
+['on']
+```
 
 > ⚠️ caveat: `gh run view --log` ของ run เก่าอาจหมดอายุตาม retention (default 90 วัน) — เก็บ log สำคัญไว้เองถ้าต้องอ้างอิงนาน
 
 ---
 
-## 2.9 แบบฝึกหัด 4 ข้อ + สรุป
+## 2.9 แบบฝึกหัด 4 ข้อ + เช็คความเข้าใจ 3 ข้อ
 
 ### แบบฝึกหัด
 
-1. เพิ่ม step ชื่อ `Show Python` ที่รัน `python3 --version` ใน `ci.yml` แล้ว push ไป branch ใหม่ — ตรวจว่าเห็น step นี้ใน `gh run view --log` ทั้ง 2 matrix job
-2. เปลี่ยน matrix เป็น `["3.12"]` อย่างเดียว แล้วเทียบชื่อ job และเวลา run กับก่อนแก้
-3. ทำให้ validator fail โดยสร้างไฟล์ `docs/tmp-broken.md` ที่ไม่มี H1 แล้ว push ขึ้น branch (อย่า merge) — ดู `gh run view --log-failed` และ annotation ว่า job แรกที่ fail คือ matrix ตัวไหน
-4. เพิ่ม `specs/**` ใน `paths` ของ `ci.yml` แล้ว push commit ที่แก้แค่ `specs/` — สังเกตว่า CI รันหรือไม่ และอธิบายว่าทำไม
+1. เพิ่ม step ชื่อ `Show Python` ที่รัน `python3 --version` ใน `ci.yml` บน branch ใหม่ แล้ว push และ **เปิด PR** (เพราะ `ci` trigger จาก `pull_request`) — ตรวจว่าเห็น step นี้ใน `gh run view --log` ทั้ง 2 matrix job
+2. บน PR ที่เปิดอยู่ เปลี่ยน matrix เป็น `["3.12"]` อย่างเดียว แล้วเทียบชื่อ job และเวลา run กับก่อนแก้
+3. ทำให้ validator fail จริง: แก้ `docs/linux/01-filesystem.md` ชั่วคราวโดยลบบรรทัด H1 แรกออก แล้ว push ขึ้น PR (อย่า merge) — ดู `gh run view --log-failed` ว่า matrix ตัวไหน fail และเห็นข้อความ `first line is not H1` จากนั้น revert การแก้
+4. บน PR เดิม เพิ่ม `specs/**` ใน `paths` ของ `ci.yml` แล้ว push commit ที่แก้แค่ `specs/` — สังเกตว่า CI รันหรือไม่ และอธิบายว่าทำไม
 
 ### เช็คความเข้าใจ
 
