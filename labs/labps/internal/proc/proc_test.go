@@ -2,6 +2,7 @@ package proc
 
 import (
 	"context"
+	"errors"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -97,5 +98,32 @@ func TestSortRSS(t *testing.T) {
 func TestSortUnknown(t *testing.T) {
 	if err := Sort(nil, "cpu"); err == nil {
 		t.Fatal("want error for unknown sort key")
+	}
+}
+
+func TestListConcurrentMatchesList(t *testing.T) {
+	rd := Reader{Root: fixture}
+	want, err := rd.List(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, workers := range []int{0, 1, 2, 8} {
+		got, err := rd.ListConcurrent(context.Background(), workers)
+		if err != nil {
+			t.Fatalf("workers=%d: %v", workers, err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("workers=%d: got %v, want %v", workers, pids(got), pids(want))
+		}
+	}
+}
+
+func TestListConcurrentCanceled(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	for _, workers := range []int{1, 4} {
+		if _, err := (Reader{Root: fixture}).ListConcurrent(ctx, workers); !errors.Is(err, context.Canceled) {
+			t.Errorf("workers=%d: err = %v, want context.Canceled", workers, err)
+		}
 	}
 }

@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/sakzeed/opencode-lab/labs/labps/internal/proc"
 	"github.com/sakzeed/opencode-lab/labs/labps/internal/render"
@@ -40,7 +42,11 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stdout, "labps %s\n", version)
 		return 0
 	case "list":
-		err = list(context.Background(), args[1:], stdout, stderr)
+		// Ctrl-C or SIGTERM cancels ctx so workers stop instead of
+		// the process being killed mid-write.
+		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		err = list(ctx, args[1:], stdout, stderr)
+		stop()
 	default:
 		err = fmt.Errorf("%w: unknown command %q", errUsage, args[0])
 	}
@@ -64,6 +70,7 @@ func list(ctx context.Context, args []string, stdout, stderr io.Writer) error {
 	limit := fs.Int("limit", 0, "show at most N processes (0 = all)")
 	sortKey := fs.String("sort", "pid", "sort by pid or rss")
 	asJSON := fs.Bool("json", false, "print JSON instead of a table")
+	workers := fs.Int("workers", 0, "read status files with N goroutines (0/1 = sequential)")
 	if err := fs.Parse(args); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
 			return err
@@ -76,12 +83,15 @@ func list(ctx context.Context, args []string, stdout, stderr io.Writer) error {
 	if *limit < 0 {
 		return fmt.Errorf("%w: --limit must be >= 0, got %d", errUsage, *limit)
 	}
+	if *workers < 0 {
+		return fmt.Errorf("%w: --workers must be >= 0, got %d", errUsage, *workers)
+	}
 	if *sortKey != "pid" && *sortKey != "rss" {
 		return fmt.Errorf("%w: --sort must be pid or rss, got %q", errUsage, *sortKey)
 	}
 
 	rd := proc.Reader{Root: procRoot()}
-	ps, err := rd.List(ctx)
+	ps, err := rd.ListConcurrent(ctx, *workers)
 	if err != nil {
 		return err
 	}

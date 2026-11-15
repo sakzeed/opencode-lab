@@ -95,3 +95,12 @@ func TestRunRuntimeError(t *testing.T) {
 		t.Errorf("stderr = %q", errb.String())
 	}
 }
+
+func TestRunWorkers(t *testing.T) {
+	if code, _, errs := runFixture(t, "list", "--workers", "4"); code != 0 {
+		t.Fatalf("--workers 4: exit = %d (%s)", code, errs)
+	}
+	if code, _, _ := runFixture(t, "list", "--workers", "-1"); code != 2 {
+		t.Fatalf("--workers -1: exit = %d, want 2", code)
+	}
+}

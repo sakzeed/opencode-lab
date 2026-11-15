@@ -13,6 +13,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 // Process is the subset of /proc/<pid>/status that labps reports.
@@ -122,6 +123,63 @@ func (rd Reader) List(ctx context.Context) ([]Process, error) {
 		}
 		if ok {
 			out = append(out, p)
+		}
+	}
+	return out, nil
+}
+
+// ListConcurrent is List with a pool of workers reading status files in
+// parallel. The result is sorted by PID, the same as List. workers <= 1
+// falls back to List.
+func (rd Reader) ListConcurrent(ctx context.Context, workers int) ([]Process, error) {
+	if workers <= 1 {
+		return rd.List(ctx)
+	}
+	pids, err := rd.pids()
+	if err != nil {
+		return nil, err
+	}
+	type result struct {
+		p   Process
+		ok  bool
+		err error
+	}
+	// Each worker writes only results[i] for the indexes it receives, so
+	// the slice needs no lock and keeps PID order.
+	results := make([]result, len(pids))
+	jobs := make(chan int)
+	var wg sync.WaitGroup
+	for range workers {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for i := range jobs {
+				p, ok, err := rd.read(pids[i])
+				results[i] = result{p, ok, err}
+			}
+		}()
+	}
+send:
+	for i := range pids {
+		select {
+		case jobs <- i:
+		case <-ctx.Done():
+			break send
+		}
+	}
+	close(jobs)
+	wg.Wait()
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	out := make([]Process, 0, len(pids))
+	for _, r := range results {
+		if r.err != nil {
+			return nil, r.err
+		}
+		if r.ok {
+			out = append(out, r.p)
 		}
 	}
 	return out, nil
