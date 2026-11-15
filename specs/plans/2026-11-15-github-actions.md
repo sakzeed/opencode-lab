@@ -43,17 +43,17 @@
 - Produces: workflow `ci` (job `check`, matrix `3.11`/`3.12`, artifact `site-<version>`), ไฟล์ dependency กลาง `requirements.txt`
 - Consumes: `tools/check_docs.py`, `mkdocs.yml`
 
-- [ ] **Step 1: สร้าง branch**
+- [x] **Step 1: สร้าง branch**
 
 Run: `git switch -c docs/github-actions-ch2`
 
-- [ ] **Step 2: เขียน `requirements.txt`**
+- [x] **Step 2: เขียน `requirements.txt`**
 
 ```text
 mkdocs-material==9.*
 ```
 
-- [ ] **Step 3: เขียน `.github/workflows/ci.yml`**
+- [x] **Step 3: เขียน `.github/workflows/ci.yml`**
 
 ```yaml
 name: ci
@@ -103,7 +103,7 @@ jobs:
           retention-days: 7
 ```
 
-- [ ] **Step 4: แก้ `pages.yml` ให้ใช้ dependency กลาง + cache**
+- [x] **Step 4: แก้ `pages.yml` ให้ใช้ dependency กลาง + cache**
 
 แทนบล็อกเดิม:
 
@@ -127,7 +127,7 @@ jobs:
         run: pip install -r requirements.txt
 ```
 
-- [ ] **Step 5: ตรวจ YAML และ local gates**
+- [x] **Step 5: ตรวจ YAML และ local gates**
 
 Run:
 ```bash
@@ -143,7 +143,7 @@ python3 tools/check_docs.py
 ```
 Expected: YAML parse ได้ทั้งสองไฟล์, triggers แสดง `pull_request`/`workflow_dispatch` และ `push`/`workflow_dispatch`; validator `ok: 12 pages`; `build=0`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add requirements.txt .github/workflows/ci.yml .github/workflows/pages.yml
@@ -160,11 +160,11 @@ git commit -m "ci: add pull request checks and shared requirements"
 - Consumes: workflow `ci` จาก Task 1
 - Produces: run id, ชื่อ matrix job, log validator, artifact — หลักฐานสำหรับบท
 
-- [ ] **Step 1: Push branch**
+- [x] **Step 1: Push branch**
 
 Run: `git push -u origin docs/github-actions-ch2`
 
-- [ ] **Step 2: เปิด PR**
+- [x] **Step 2: เปิด PR**
 
 Run:
 ```bash
@@ -173,7 +173,7 @@ gh pr create --base main --head docs/github-actions-ch2 \
   --body "เพิ่ม CI สำหรับ PR (matrix 3.11/3.12 + cache + artifact) และบทเรียน GitHub Actions บทที่ 2 — ไม่ deploy จาก PR"
 ```
 
-- [ ] **Step 3: รอ CI และบันทึกผล**
+- [x] **Step 3: รอ CI และบันทึกผล**
 
 Run:
 ```bash
@@ -182,7 +182,7 @@ gh run list --workflow ci --limit 1 --json databaseId,headSha,status,conclusion 
 ```
 Expected: check ทั้งสองตัว success; เก็บ `databaseId` ไว้
 
-- [ ] **Step 4: เก็บหลักฐาน log/artifact**
+- [x] **Step 4: เก็บหลักฐาน log/artifact**
 
 Run:
 ```bash
@@ -210,7 +210,7 @@ Expected: เห็น `ok: 12 pages`, ชื่อ job `check (3.11)`/`check (3
 - Consumes: หลักฐานจาก Task 2
 - Produces: หน้าที่ 13 ของเว็บ, nav 2 ลิงก์ Git
 
-- [ ] **Step 1: เพิ่มหน้าลง EXPECTED (test ที่ยัง fail)**
+- [x] **Step 1: เพิ่มหน้าลง EXPECTED (test ที่ยัง fail)**
 
 ใน `tools/check_docs.py` เพิ่มต่อจาก `docs/git/01-git-github.md`:
 
@@ -218,12 +218,12 @@ Expected: เห็น `ok: 12 pages`, ชื่อ job `check (3.11)`/`check (3
     "docs/git/02-actions.md",
 ```
 
-- [ ] **Step 2: รัน validator ให้เห็น RED**
+- [x] **Step 2: รัน validator ให้เห็น RED**
 
 Run: `python3 tools/check_docs.py`
 Expected: `FAIL` + `- missing: docs/git/02-actions.md`, exit 1
 
-- [ ] **Step 3: เขียน `docs/git/02-actions.md`**
+- [x] **Step 3: เขียน `docs/git/02-actions.md`**
 
 โครงบังคับ:
 
@@ -255,12 +255,12 @@ Expected: `FAIL` + `- missing: docs/git/02-actions.md`, exit 1
 
 ต้องมี caveat อย่างน้อย 2 จุด: (1) `on:` เป็น boolean ใน YAML 1.1, (2) Node20 shim warning เป็นข้อมูลไม่ใช่ failure
 
-- [ ] **Step 4: รัน validator ให้ผ่าน**
+- [x] **Step 4: รัน validator ให้ผ่าน**
 
 Run: `python3 tools/check_docs.py`
 Expected: `ok: 13 pages`, exit 0
 
-- [ ] **Step 5: ต่อเข้า nav และหน้าแรก**
+- [x] **Step 5: ต่อเข้า nav และหน้าแรก**
 
 - `mkdocs.yml` ใต้ `git/01-git-github.md`:
 ```yaml
@@ -269,7 +269,7 @@ Expected: `ok: 13 pages`, exit 0
 - `docs/index.md`: `**Git & GitHub** (1 บท)` → `(2 บท)` และเพิ่ม `GitHub Actions/CI`
 - `README.md`: `**Git & GitHub (1 บท)**` → `(2 บท)` และเพิ่ม `GitHub Actions`
 
-- [ ] **Step 6: ตรวจ build + nav**
+- [x] **Step 6: ตรวจ build + nav**
 
 Run:
 ```bash
@@ -280,19 +280,19 @@ grep -o 'href="git/0[12][^"]*"' site/index.html | sort -u
 ```
 Expected: `ok: 13 pages`; `build=0`; `page-ok`; เห็น 2 ลิงก์ Git
 
-- [ ] **Step 7: ตรวจ mixed script / chat text**
+- [x] **Step 7: ตรวจ mixed script / chat text**
 
 Run: `grep -nE 'ครับ|ผม|เดี๋ยว|所以你|主线|причина|�' docs/git/02-actions.md || echo clean`
 Expected: `clean`
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add docs/git/02-actions.md tools/check_docs.py mkdocs.yml docs/index.md README.md
 git commit -m "docs(git): add chapter 2 on GitHub Actions"
 ```
 
-- [ ] **Step 9: Push และเก็บ run ที่สอง (cache hit)**
+- [x] **Step 9: Push และเก็บ run ที่สอง (cache hit)**
 
 Run: `git push`
 แล้ว:
@@ -313,12 +313,12 @@ Expected: CI success; log แสดง `ok: 13 pages` และ cache restored (
 - Consumes: commits ทั้งหมดบน branch
 - Produces: หน้าใหม่บนเว็บ, 13/13 หน้า 200
 
-- [ ] **Step 1: Merge ผ่าน PR**
+- [x] **Step 1: Merge ผ่าน PR**
 
 Run: `gh pr merge --rebase --delete-branch`
 Expected: merge สำเร็จ; `git switch main && git pull --ff-only`
 
-- [ ] **Step 2: ดู deploy run**
+- [x] **Step 2: ดู deploy run**
 
 Run:
 ```bash
@@ -327,7 +327,7 @@ gh run watch <databaseId> --exit-status --interval 10
 ```
 Expected: build + deploy success
 
-- [ ] **Step 3: Poll หน้าใหม่**
+- [x] **Step 3: Poll หน้าใหม่**
 
 Run:
 ```bash
@@ -338,7 +338,7 @@ done
 ```
 Expected: `200`
 
-- [ ] **Step 4: ตรวจ marker และทุกหน้า**
+- [x] **Step 4: ตรวจ marker และทุกหน้า**
 
 Run:
 ```bash
@@ -351,7 +351,7 @@ done
 ```
 Expected: marker ≥1; 13/13 = 200
 
-- [ ] **Step 5: ตรวจ main ตรงกับ origin และ append ledger**
+- [x] **Step 5: ตรวจ main ตรงกับ origin และ append ledger**
 
 Run: `git status --short; git log -1 --format='%h %s'; git rev-list --left-right --count origin/main...HEAD`
 แล้ว append `/tmp/opencode/sdd-github-actions/progress.md`: วันที่, commits, run ids, ผล CI/deploy/200
