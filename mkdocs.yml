@@ -61,3 +61,4 @@ nav:
       - 4. process, signal และ job control: linux/04-processes.md
   - Git & GitHub:
       - 1. git พื้นฐาน → GitHub: git/01-git-github.md
+      - 2. GitHub Actions (CI/CD): git/02-actions.md
