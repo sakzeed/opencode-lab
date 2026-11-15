@@ -354,4 +354,4 @@ Expected: marker ≥1; 13/13 = 200
 - [ ] **Step 5: ตรวจ main ตรงกับ origin และ append ledger**
 
 Run: `git status --short; git log -1 --format='%h %s'; git rev-list --left-right --count origin/main...HEAD`
-แล้ว append `/tmp/opencode/sdd-docs-site/progress.md`: วันที่, commits, run ids, ผล CI/deploy/200
+แล้ว append `/tmp/opencode/sdd-github-actions/progress.md`: วันที่, commits, run ids, ผล CI/deploy/200
