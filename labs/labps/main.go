@@ -15,7 +15,9 @@ import (
 	"github.com/sakzeed/opencode-lab/labs/labps/internal/render"
 )
 
-const version = "0.1.0"
+// version is a var, not a const, so release builds can set it with
+// go build -ldflags="-X main.version=...".
+var version = "0.1.0"
 
 const usage = `usage:
   labps --version
