@@ -25,6 +25,7 @@ EXPECTED = [
     "docs/linux/03-permissions.md",
     "docs/linux/04-processes.md",
     "docs/git/01-git-github.md",
+    "docs/git/02-actions.md",
 ]
 
 CHAT_MARKERS = [
