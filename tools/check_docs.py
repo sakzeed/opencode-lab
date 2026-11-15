@@ -23,6 +23,7 @@ EXPECTED = [
     "docs/linux/01-filesystem.md",
     "docs/linux/02-text-pipes.md",
     "docs/linux/03-permissions.md",
+    "docs/linux/04-processes.md",
     "docs/git/01-git-github.md",
 ]
 
