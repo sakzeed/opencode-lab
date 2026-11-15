@@ -46,7 +46,7 @@ python3 tools/check_docs.py
 ```
 
 - **OpenCode V2 (7 บท)** — client/server, config & permissions, agents, commands & skills, policies, MCP & plugins, CLI/API/SDK
-- **Linux (3 บท)** — filesystem, text processing (pipes/redirects), permissions & ownership
+- **Linux (4 บท)** — filesystem, text processing (pipes/redirects), permissions & ownership, process/signal/job control
 - **Git & GitHub (1 บท)** — commit graph, branch/merge, remote, PR
 
 ## ⚠️ Secret — ห้าม commit

@@ -58,5 +58,6 @@ nav:
       - 1. ระบบไฟล์: linux/01-filesystem.md
       - 2. ข้อความ ท่อ และ redirect: linux/02-text-pipes.md
       - 3. สิทธิ์และเจ้าของไฟล์: linux/03-permissions.md
+      - 4. process, signal และ job control: linux/04-processes.md
   - Git & GitHub:
       - 1. git พื้นฐาน → GitHub: git/01-git-github.md
