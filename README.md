@@ -37,7 +37,7 @@ opencode mcp list
 ```sh
 # preview ในเครื่อง
 python3 -m venv .venv
-.venv/bin/pip install "mkdocs-material==9.*"
+.venv/bin/pip install -r requirements.txt
 .venv/bin/mkdocs serve        # http://127.0.0.1:8000
 
 # ตรวจก่อน push (CI รันสองคำสั่งนี้)
@@ -47,7 +47,7 @@ python3 tools/check_docs.py
 
 - **OpenCode V2 (7 บท)** — client/server, config & permissions, agents, commands & skills, policies, MCP & plugins, CLI/API/SDK
 - **Linux (4 บท)** — filesystem, text processing (pipes/redirects), permissions & ownership, process/signal/job control
-- **Git & GitHub (2 บท)** — commit graph, branch/merge, remote, PR, GitHub Actions/CI
+- **Git & GitHub (2 บท)** — commit graph, branch/merge, remote, PR, Pages, GitHub Actions & CI
 
 ## ⚠️ Secret — ห้าม commit
 
