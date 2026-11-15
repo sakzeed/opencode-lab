@@ -16,7 +16,7 @@ func Table(w io.Writer, ps []proc.Process) error {
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', tabwriter.AlignRight)
 	fmt.Fprintln(tw, "PID\tPPID\tSTATE\tRSS_KB\t NAME")
 	for _, p := range ps {
-		fmt.Fprintf(tw, "%d\t%d\t%c\t%d\t %s\n", p.PID, p.PPID, p.State, p.RSSKB, p.Name)
+		fmt.Fprintf(tw, "%d\t%d\t%s\t%d\t %s\n", p.PID, p.PPID, state(p.State), p.RSSKB, p.Name)
 	}
 	return tw.Flush()
 }
@@ -33,9 +33,17 @@ type row struct {
 func JSON(w io.Writer, ps []proc.Process) error {
 	rows := make([]row, len(ps))
 	for i, p := range ps {
-		rows[i] = row{p.PID, p.PPID, string(p.State), p.RSSKB, p.Name}
+		rows[i] = row{p.PID, p.PPID, state(p.State), p.RSSKB, p.Name}
 	}
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
 	return enc.Encode(rows)
+}
+
+// state renders the one-letter state; "?" when status had no State line.
+func state(b byte) string {
+	if b == 0 {
+		return "?"
+	}
+	return string(b)
 }

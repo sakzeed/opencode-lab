@@ -72,3 +72,21 @@ func TestJSONEmpty(t *testing.T) {
 		t.Errorf("got %q, want \"[]\\n\"", got)
 	}
 }
+
+// A status file without State leaves State at 0; never print a NUL byte.
+func TestUnknownState(t *testing.T) {
+	ps := []proc.Process{{PID: 9, Name: "odd"}}
+	var tbl, js bytes.Buffer
+	if err := Table(&tbl, ps); err != nil {
+		t.Fatal(err)
+	}
+	if err := JSON(&js, ps); err != nil {
+		t.Fatal(err)
+	}
+	if bytes.IndexByte(tbl.Bytes(), 0) >= 0 || !bytes.Contains(tbl.Bytes(), []byte(" ? ")) {
+		t.Errorf("table = %q, want ? for unknown state", tbl.String())
+	}
+	if !bytes.Contains(js.Bytes(), []byte(`"state": "?"`)) {
+		t.Errorf("json = %s, want \"state\": \"?\"", js.String())
+	}
+}
