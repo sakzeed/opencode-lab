@@ -11,7 +11,7 @@ Git บทที่ 1 จบที่ push → branch → PR แต่ยัง�
 
 **ทำ**
 - `docs/git/02-actions.md` 1 ไฟล์ (9 ส่วน + แบบฝึกหัด 4 ข้อ)
-- `requirements.txt` (`mkdocs-material==9.*`) ให้ทั้ง два workflow ใช้ไฟล์เดียวกัน
+- `requirements.txt` (`mkdocs-material==9.*`) ให้ทั้งสอง workflow ใช้ไฟล์เดียวกัน
 - `.github/workflows/ci.yml` — `pull_request` + `workflow_dispatch`, matrix Python 3.11/3.12, pip cache, upload site artifact, ไม่ deploy
 - แก้ `pages.yml`: ใช้ `pip install -r requirements.txt` + `cache: pip`
 - `tools/check_docs.py` เพิ่มหน้าใหม่ใน EXPECTED
